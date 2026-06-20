@@ -9,7 +9,7 @@ AI professionals face constant information overload from high-velocity research,
 
 ## Tech Stack
 *   **Core Logic**: Python 3.12+ (managed with `uv`)
-*   **Inference Engine**: Groq API (utilizing `openai/gpt-oss-120b` for fast structured JSON outputs)
+*   **Inference Engine**: Any OpenAI-compatible API (e.g. Groq, OpenRouter, local Ollama) that supports structured JSON outputs.
 *   **Database & ORM**: PostgreSQL & SQLAlchemy
 *   **Data Parsing**: Beautiful Soup 4, Docling, Feedparser, and YouTube Transcript API
 *   **Infrastructure**: Docker & Docker Compose
@@ -44,8 +44,9 @@ Clone the repository and copy the environment template:
 cp app/example.env .env
 ```
 Fill in the `.env` file with your credentials:
-*   `GROQ_API_KEY`: Your Groq platform API key.
-*   `GROQ_MODEL`: Model name (defaults to `openai/gpt-oss-120b`).
+*   `MODEL_API_KEY`: Your API key for the LLM provider.
+*   `MODEL_BASE_URL`: The OpenAI-compatible base URL (e.g. `https://api.groq.com/openai/v1` for Groq).
+*   `MODEL_NAME`: Model name (e.g. `llama-3.3-70b-versatile` for Groq).
 *   `MY_EMAIL`: Sender email address.
 *   `APP_PASSWORD`: SMTP app password for sending emails.
 
@@ -70,6 +71,6 @@ uv run app/database/create_tables.py
 ### 5. Run the Pipeline
 Run the daily run command (accepts optional parameters `[hours]` and `[top_n]`):
 ```bash
-# Default: last 24 hours, top 10 articles
-uv run main.py 168 10
+# Default: last 72 hours(3 days), top 10 articles
+uv run main.py 72 10
 ```

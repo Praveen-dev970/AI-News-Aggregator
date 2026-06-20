@@ -68,9 +68,10 @@ Keep it concise (2-3 sentences for the introduction), friendly, and professional
 class EmailAgent:
     def __init__(self, user_profile: dict):
         self.client = OpenAI(
-            api_key=os.getenv("GROQ_API_KEY"), base_url="https://api.groq.com/openai/v1"
+            api_key=os.getenv("MODEL_API_KEY"),
+            base_url=os.getenv("MODEL_BASE_URL")
         )
-        self.model = os.getenv("GROQ_MODEL", "openai/gpt-oss-120b")
+        self.model = os.getenv("MODEL_NAME", "llama-3.3-70b-versatile")
         self.user_profile = user_profile
 
     def generate_introduction(self, ranked_articles: List) -> EmailIntroduction:

@@ -46,9 +46,10 @@ Rank articles from most relevant (rank 1) to least relevant. Ensure each article
 class CuratorAgent:
     def __init__(self, user_profile: dict):
         self.client = OpenAI(
-            api_key=os.getenv("GROQ_API_KEY"), base_url="https://api.groq.com/openai/v1"
+            api_key=os.getenv("MODEL_API_KEY"),
+            base_url=os.getenv("MODEL_BASE_URL")
         )
-        self.model = os.getenv("GROQ_MODEL", "openai/gpt-oss-120b")
+        self.model = os.getenv("MODEL_NAME", "llama-3.3-70b-versatile")
         self.user_profile = user_profile
         self.system_prompt = self._build_system_prompt()
 
