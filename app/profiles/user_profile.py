@@ -1,5 +1,5 @@
 USER_PROFILE = {
-    "name": "Krishna",
+    "name": "Praveen",
     "title": "AI Engineer & Researcher",
     "background": "Experienced AI engineer with deep interest in practical AI applications, research breakthroughs, and production-ready systems",
     "interests": [

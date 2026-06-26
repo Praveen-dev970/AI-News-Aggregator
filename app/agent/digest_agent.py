@@ -37,19 +37,37 @@ class DigestAgent:
         self, title: str, content: str, article_type: str
     ) -> Optional[DigestOutput]:
         try:
-            user_prompt = f"Create a digest for this {article_type}: \n Title: {title} \n Content: {content[:8000]}"
+            user_prompt = f"""
+    Create a digest for this {article_type}
 
-            response = self.client.beta.chat.completions.parse(
+    Title: {title}
+
+    Content:
+    {content[:8000]}
+
+    Return:
+    1. A short catchy title (5-10 words)
+    2. A 2-3 sentence summary
+    """
+
+            response = self.client.chat.completions.create(
                 model=self.model,
                 messages=[
                     {"role": "system", "content": self.system_prompt},
                     {"role": "user", "content": user_prompt},
                 ],
                 temperature=0.7,
-                response_format=DigestOutput,
             )
 
-            return response.choices[0].message.parsed
+            ai_response = response.choices[0].message.content
+
+            print(ai_response)
+
+            return DigestOutput(
+                title=title,
+                summary=ai_response
+            )
+
         except Exception as e:
             print(f"Error generating digest: {e}")
             return None

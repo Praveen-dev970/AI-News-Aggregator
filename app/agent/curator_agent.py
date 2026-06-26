@@ -91,18 +91,20 @@ class CuratorAgent:
  Provide a relevance score (0.0-10.0) and rank (1-{len(digests)}) for each article, ordered from most to least relevant."""
 
         try:
-            response = self.client.beta.chat.completions.parse(
-                model=self.model,
-                messages=[
-                    {"role": "system", "content": self.system_prompt},
-                    {"role": "user", "content": user_prompt},
-                ],
-                temperature=0.3,
-                response_format=RankedDigestList,
-            )
+            ranked_articles = []
 
-            ranked_list = response.choices[0].message.parsed
-            return ranked_list.articles if ranked_list else []
+            for i, digest in enumerate(digests):
+                ranked_articles.append(
+                    RankedArticle(
+                        digest_id=str(digest["id"]),
+                        rank=i + 1,
+                        relevance_score=round(10.0 - (i * 0.1), 1),
+                        reasoning="Auto-ranked for demo"
+                    )
+                )
+
+            return ranked_articles
+
         except Exception as e:
             print(f"Error ranking digests: {e}")
             return []

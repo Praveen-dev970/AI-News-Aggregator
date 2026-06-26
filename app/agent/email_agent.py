@@ -98,21 +98,21 @@ class EmailAgent:
  Generate a greeting and introduction that previews these articles."""
 
         try:
-            response = self.client.beta.chat.completions.parse(
+            response = self.client.chat.completions.create(
                 model=self.model,
                 messages=[
                     {"role": "system", "content": EMAIL_PROMPT},
                     {"role": "user", "content": user_prompt},
                 ],
                 temperature=0.7,
-                response_format=EmailIntroduction,
             )
 
-            intro = response.choices[0].message.parsed
-            if not intro.greeting.startswith(f"Hey {self.user_profile['name']}"):
-                intro.greeting = f"Hey {self.user_profile['name']}, here is your daily digest of AI news for {current_date}."
+            intro_text = response.choices[0].message.content
 
-            return intro
+            return EmailIntroduction(
+                greeting=f"Hey {self.user_profile['name']}, here is your daily digest of AI news for {current_date}.",
+                introduction=intro_text[:500]
+            )
         except Exception as e:
             print(f"Error generating introduction: {e}")
             current_date = datetime.now().strftime("%B %d, %Y")
